@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand Colors - UniDash Aesthetic (Orange/Dark theme) */
+  --primary: 25 100% 50%; /* #FF6B00 - Pure Orange */
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 0 0% 9%;
+  --secondary-foreground: 25 100% 50%;
+
+  --accent: 25 100% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+  
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 25 100% 50%;
+  
+  --radius: 0.75rem;
+
+  /* Custom Fonts */
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+}
+
+.dark {
+  --background: 0 0% 3.9%;
+  --foreground: 0 0% 98%;
+  
+  --card: 0 0% 9%;
+  --card-foreground: 0 0% 98%;
+  
+  --popover: 0 0% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  
+  --primary: 25 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 0 0% 14.9%;
+  --secondary-foreground: 0 0% 98%;
+  
+  --muted: 0 0% 14.9%;
+  --muted-foreground: 0 0% 63.9%;
+  
+  --accent: 25 100% 50%;
+  --accent-foreground: 0 0% 98%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 0 0% 14.9%;
+  --input: 0 0% 14.9%;
+  --ring: 25 100% 50%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/30 transition-colors;
+}
+
+/* Glass effect utilities */
+.glass {
+  @apply bg-white/70 dark:bg-black/40 backdrop-blur-md border border-white/20 dark:border-white/10;
+}
+
+.glass-card {
+  @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm hover:shadow-md transition-all duration-300;
+}
+
+/* Bento Grid System */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}

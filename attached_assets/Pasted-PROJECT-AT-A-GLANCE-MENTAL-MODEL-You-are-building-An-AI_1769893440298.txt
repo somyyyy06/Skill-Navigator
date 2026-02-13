@@ -1,0 +1,383 @@
+PROJECT AT A GLANCE (MENTAL MODEL)
+
+You are building:
+
+An AI-powered learning roadmap platform
+where users:
+
+explore structured roadmaps
+
+enroll in a roadmap
+
+track daily progress
+
+get help from an AI mentor
+
+are intelligently guided if they start dropping off
+
+🧭 HIGH-LEVEL FLOW (READ THIS FIRST)
+User (Browser)
+   ↓
+Frontend (React Dashboard)
+   ↓
+Backend (Node + Express APIs)
+   ↓
+Databases (MongoDB / PostgreSQL)
+   ↓
+ML Service (FastAPI)
+   ↓
+AI Decisions + Chatbot
+   ↓
+Back to User (Suggestions, Analytics, Help)
+
+🧱 COMPLETE PROJECT STRUCTURE (PASTE THIS INTO REPLIT)
+learning-platform/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── Topbar.jsx
+│   │   │   ├── RoadmapCard.jsx
+│   │   │   ├── ProgressChart.jsx
+│   │   │   ├── ChatbotWidget.jsx
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── Landing.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Roadmaps.jsx
+│   │   │   ├── RoadmapDetail.jsx
+│   │   │   ├── Progress.jsx
+│   │   │
+│   │   ├── store/
+│   │   │   ├── authSlice.js
+│   │   │   ├── roadmapSlice.js
+│   │   │   ├── progressSlice.js
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │
+│   └── package.json
+│
+├── backend/
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── roadmap.controller.js
+│   │   ├── progress.controller.js
+│   │   ├── chatbot.controller.js
+│   │
+│   ├── services/
+│   │   ├── ml.service.js
+│   │   ├── contextBuilder.js
+│   │   ├── llm.service.js
+│   │
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Roadmap.js
+│   │   ├── Progress.js
+│   │   ├── ChatLog.js
+│   │
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── roadmap.routes.js
+│   │   ├── progress.routes.js
+│   │   ├── chatbot.routes.js
+│   │
+│   ├── server.js
+│   └── package.json
+│
+├── ml-service/
+│   ├── training/
+│   │   ├── train_recommender.py
+│   │   ├── train_skill_classifier.py
+│   │   ├── train_progress_regressor.py
+│   │   ├── train_dropout_model.py
+│   │
+│   ├── models/
+│   │   ├── recommender.pkl
+│   │   ├── skill.pkl
+│   │   ├── progress.pkl
+│   │   ├── dropout.pkl
+│   │
+│   ├── main.py
+│   └── requirements.txt
+│
+├── docker-compose.yml
+└── README.md
+
+🧍 USER JOURNEY — START TO END (VERY IMPORTANT)
+
+Now let’s walk through exactly what happens when a user uses your website.
+
+🔹 STEP 1 — USER VISITS WEBSITE
+Frontend
+
+Landing.jsx loads
+
+Shows:
+
+Platform intro
+
+“Explore Roadmaps”
+
+“Login / Register”
+
+📌 No backend yet
+
+🔹 STEP 2 — USER REGISTERS / LOGS IN
+Frontend
+
+User enters email/password
+
+API call → /api/auth/login
+
+Backend
+
+Auth controller:
+
+Verifies credentials
+
+Returns JWT
+
+Database (MongoDB)
+
+Stores user record
+
+📌 User session starts
+
+🔹 STEP 3 — DASHBOARD LOADS
+Frontend (Dashboard.jsx)
+
+Sidebar visible:
+
+Profile
+
+Roadmaps
+
+Progress
+
+Chatbot
+
+API calls:
+
+/api/roadmaps
+
+/api/progress/user
+
+Backend
+
+Fetches:
+
+Available roadmaps
+
+User enrollment status
+
+📌 Dashboard cards rendered
+
+🔹 STEP 4 — USER EXPLORES ROADMAPS
+Frontend (Roadmaps.jsx)
+
+Displays roadmap cards:
+
+Backend
+
+Frontend
+
+AI/ML
+
+DevOps
+
+Backend
+
+Roadmap data fetched from MongoDB
+
+📌 Pure read operation
+
+🔹 STEP 5 — USER OPENS A ROADMAP
+Frontend (RoadmapDetail.jsx)
+
+Shows:
+
+Steps
+
+Resources
+
+“Enroll” button
+
+Backend
+
+/api/roadmaps/:id
+
+📌 Still no AI
+
+🔹 STEP 6 — USER ENROLLS IN ROADMAP
+Frontend
+
+Click “Enroll”
+
+Backend
+
+Creates enrollment record
+
+Initializes progress
+
+Database
+
+Enrollment
+
+Progress document created
+
+📌 Tracking starts here
+
+🔹 STEP 7 — DAILY LEARNING & PROGRESS TRACKING
+User Actions
+
+Marks step completed
+
+Spends time learning
+
+Comes daily / misses days
+
+Backend Stores
+
+Date
+
+Steps completed
+
+Time spent
+
+📌 This data is GOLD for ML
+
+🔹 STEP 8 — PROGRESS DASHBOARD
+Frontend (Progress.jsx)
+
+Charts:
+
+Daily progress
+
+Completion %
+
+Streaks
+
+Backend
+
+Aggregates progress
+
+Sends analytics data
+
+📌 Visualization only
+
+🤖 AI / ML PART — HOW IT WORKS INTERNALLY
+🔹 STEP 9 — USER USES CHATBOT
+Frontend (ChatbotWidget.jsx)
+
+User asks:
+
+“I’m stuck in async JavaScript”
+
+Backend Chat Flow
+
+1️⃣ Fetch user progress
+2️⃣ Fetch roadmap step
+3️⃣ Fetch ML predictions
+4️⃣ Build AI context
+5️⃣ Send to LLM
+
+Context Sent to AI
+User level: Beginner
+Current roadmap: Backend
+Weak topic: Async JS
+Dropout risk: High
+
+AI Response
+
+Simplified explanation
+
+Resource suggestion
+
+Encouragement
+
+📌 This is context-aware AI
+
+🔹 STEP 10 — ML SERVICE RUNS IN BACKGROUND
+
+ML Service continuously:
+
+Predicts skill level
+
+Predicts progress speed
+
+Predicts dropout risk
+
+Dropout Prediction Example
+
+Input
+
+{
+  "days_inactive": 4,
+  "progress_speed": 0.2,
+  "doubts": 6
+}
+
+
+Output
+
+Dropout Risk = YES
+
+🔹 STEP 11 — INTELLIGENT INTERVENTION 🔥
+
+If dropout risk = YES:
+
+Backend triggers:
+
+Chatbot message
+
+Lighter roadmap suggestion
+
+Revision resources
+
+📌 This is closed-loop intelligence
+
+📊 ANALYTICS PIPELINE (SIMPLE VIEW)
+User Activity
+ → MongoDB (raw data)
+ → Backend aggregation
+ → PostgreSQL (analytics)
+ → Dashboard charts
+
+🐳 DOCKERIZED DEPLOYMENT (FINAL STEP)
+
+All services run together:
+
+Frontend
+Backend
+ML Service
+MongoDB
+Redis
+
+
+One command:
+
+docker-compose up
+
+
+📌 Easy demo
+📌 Easy evaluation
+
+🧠 HOW YOU SHOULD BUILD THIS (IMPORTANT)
+BUILD ORDER (DO NOT CHANGE)
+
+1️⃣ Frontend UI only
+2️⃣ Backend CRUD
+3️⃣ Progress tracking
+4️⃣ Analytics dashboard
+5️⃣ Chatbot
+6️⃣ ML models
+7️⃣ Dropout intelligence
+8️⃣ Docker
+
+🎓 WHAT YOU CAN SAY CONFIDENTLY
+
+“I designed a full-stack learning platform with an AI-driven mentorship system and ML-based behavioral prediction to improve learner retention.”
+
+That’s a top-tier final year project sentence.
