@@ -300,7 +300,28 @@ Return ONLY valid JSON in this exact format:
       const geminiData = await geminiResponse.json();
       const content =
         geminiData?.candidates?.[0]?.content?.parts?.map((part: { text: string }) => part.text).join("") || "{}";
-      const roadmapData = JSON.parse(content);
+      
+      // Extract JSON from potential markdown code blocks
+      let jsonContent = content.trim();
+      const jsonMatch = jsonContent.match(/```(?:json)?\s*(\{[\s\S]*\})\s*```/);
+      if (jsonMatch) {
+        jsonContent = jsonMatch[1];
+      }
+      
+      console.log("Gemini raw response:", content);
+      console.log("Extracted JSON:", jsonContent);
+      
+      let roadmapData;
+      try {
+        roadmapData = JSON.parse(jsonContent);
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        console.error("Content that failed to parse:", jsonContent);
+        return res.status(500).json({ 
+          message: "Failed to parse AI response. Please try again.",
+          details: "The AI returned invalid JSON format"
+        });
+      }
 
       res.json({ roadmap: roadmapData });
     } catch (error) {
@@ -449,15 +470,66 @@ async function seedDatabase() {
         category: "frontend",
         difficulty: "beginner",
         steps: [
-          "HTML Fundamentals", 
-          "CSS Basics & Flexbox", 
-          "Responsive Design with Tailwind", 
-          "JavaScript Essentials",
-          "DOM Manipulation", 
-          "Async JS (Fetch & Promises)", 
-          "React Fundamentals", 
-          "React Hooks & State",
-          "Frontend Project Construction"
+          {
+            title: "HTML Tutorial",
+            url: "https://www.youtube.com/watch?v=916GWv2Qs08&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=2",
+          },
+          {
+            title: "CSS Tutorial",
+            url: "https://www.youtube.com/watch?v=OXGznpKZ_sA&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=3",
+          },
+          {
+            title: "JavaScript Programming Full Course",
+            url: "https://www.youtube.com/watch?v=jS4aFq5-91M&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=5",
+          },
+          {
+            title: "Build a Simple Website with HTML, CSS and JavaScript",
+            url: "https://www.youtube.com/watch?v=krfUjg0S2uI&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=7",
+          },
+          {
+            title: "Web App Tutorial - JavaScript, Mobile First, Accessibility, Persistent Data, Sass",
+            url: "https://www.youtube.com/watch?v=y51Cv4wnsPw&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=8",
+          },
+          {
+            title: "Git and GitHub for Beginners",
+            url: "https://www.youtube.com/watch?v=RGOj5yH7evk&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=9",
+          },
+          {
+            title: "Learn Bootstrap 5 and SASS by Building a Portfolio Website",
+            url: "https://www.youtube.com/watch?v=iJKCj8uAHz8&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=10",
+          },
+          {
+            title: "Learn React 18 with Redux Toolkit",
+            url: "https://www.youtube.com/watch?v=2-crBg6wpp0&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=11",
+          },
+          {
+            title: "Learn Tailwind CSS",
+            url: "https://www.youtube.com/watch?v=ft30zcMlFao&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=12",
+          },
+          {
+            title: "Learn Vite",
+            url: "https://www.youtube.com/watch?v=VAeRhmpcWEQ&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=13",
+          },
+          {
+            title: "Testing JavaScript with Cypress",
+            url: "https://www.youtube.com/watch?v=u8vMu7viCm8&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=14",
+          },
+          {
+            title: "React Testing Course for Beginners",
+            url: "https://www.youtube.com/watch?v=8vfQ6SWBZ-U&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=15",
+          },
+          {
+            title: "Learn TypeScript",
+            url: "https://www.youtube.com/watch?v=30LWjhZzg50&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=16",
+          },
+          {
+            title: "GraphQL Course for Beginners",
+            url: "https://www.youtube.com/watch?v=5199E50O7SI&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=17",
+          },
+          {
+            title: "Next.js React Framework Course",
+            url: "https://www.youtube.com/watch?v=KjY94sAKLlw&list=PLWKjhJtqVAbmMuZ3saqRIBimAKIMYkt0E&index=18",
+          }
         ]
       },
       {
@@ -616,14 +688,24 @@ async function seedDatabase() {
       });
 
       for (let i = 0; i < data.steps.length; i++) {
+        const step = data.steps[i] as string | { title: string; url: string };
+        const title = typeof step === "string" ? step : step.title;
+        const url = typeof step === "string" ? null : step.url;
+        const resources = url
+          ? [{ title, url, type: "video" as const }]
+          : [];
+        const content = url
+          ? `# ${title}\n\nWatch the lesson here: [${title}](${url}).\n\nTake notes and summarize key points after watching.`
+          : `# ${title}\n\nThis guide covers the core concepts and practical implementations of ${title}.`;
+
         await storage.createStep({
           roadmapId: roadmap.id,
-          title: data.steps[i],
-          description: `Master ${data.steps[i]} in this detailed learning guide.`,
-          content: `# ${data.steps[i]}\n\nThis guide covers the core concepts and practical implementations of ${data.steps[i]}.`,
+          title,
+          description: `Master ${title} in this detailed learning guide.`,
+          content,
           order: i + 1,
           estimatedMinutes: 60,
-          resources: []
+          resources,
         });
       }
     }

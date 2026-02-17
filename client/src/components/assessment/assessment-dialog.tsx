@@ -82,6 +82,61 @@ const SAMPLE_QUESTIONS: Question[] = [
       "Performance doesn't matter"
     ],
     correctAnswer: 2
+  },
+  {
+    id: 6,
+    question: "What is the purpose of automated testing?",
+    options: [
+      "To waste development time",
+      "To ensure code quality and prevent regressions",
+      "To make deployments slower",
+      "Testing is unnecessary"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 7,
+    question: "Which principle is most important in software architecture?",
+    options: [
+      "Write everything in one file",
+      "Separation of concerns and modularity",
+      "Never refactor code",
+      "Avoid documentation"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 8,
+    question: "How should you approach learning a new technology?",
+    options: [
+      "Only read documentation once",
+      "Skip the basics and start with advanced topics",
+      "Build projects while learning fundamentals",
+      "Memorize syntax without understanding concepts"
+    ],
+    correctAnswer: 2
+  },
+  {
+    id: 9,
+    question: "What is the best strategy for debugging complex issues?",
+    options: [
+      "Random code changes until it works",
+      "Systematic isolation and testing of components",
+      "Give up and rewrite everything",
+      "Ignore error messages"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 10,
+    question: "Which approach leads to better code maintainability?",
+    options: [
+      "Writing clever, complex one-liners",
+      "Avoiding comments completely",
+      "Clear naming, documentation, and simple logic",
+      "Using global variables everywhere"
+    ],
+    correctAnswer: 2
   }
 ];
 

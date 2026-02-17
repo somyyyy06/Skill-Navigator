@@ -1,0 +1,96 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: skill-navigator-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-crisis}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-crisis123}
+      POSTGRES_DB: ${DB_NAME:-learnai}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-crisis} -d ${DB_NAME:-learnai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Main Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: skill-navigator-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Database Configuration
+      DATABASE_URL: postgresql://${DB_USER:-crisis}:${DB_PASSWORD:-crisis123}@postgres:5432/${DB_NAME:-learnai}
+      
+      # Server Configuration
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 5000
+      HOST: 0.0.0.0
+      
+      # JWT Secret (IMPORTANT: Change in production!)
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      
+      # API Keys (Add your actual API keys here)
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      
+      # CORS Configuration
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5000}
+    ports:
+      - "${PORT:-5000}:5000"
+    volumes:
+      # Mount only for development; remove for production
+      - ./server:/app/server
+      - ./shared:/app/shared
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: pgAdmin for Database Management (Development Only)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: skill-navigator-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - app-network
+    restart: unless-stopped
+    profiles:
+      - dev  # Only run with: docker-compose --profile dev up
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

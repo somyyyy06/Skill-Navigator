@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, AlertCircle } from "lucide-react";
+import { Loader2, Sparkles, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface RoadmapRecommendationDialogProps {
@@ -20,6 +20,11 @@ interface RoadmapRecommendationDialogProps {
   roadmapTitle: string;
   onGenerateRoadmap: (weakAreas: string) => void;
   isGenerating?: boolean;
+  generatedRoadmap?: {
+    title: string;
+    description: string;
+    steps: Array<{ title: string; description: string }>;
+  };
 }
 
 export function RoadmapRecommendationDialog({
@@ -29,14 +34,61 @@ export function RoadmapRecommendationDialog({
   roadmapTitle,
   onGenerateRoadmap,
   isGenerating = false,
+  generatedRoadmap,
 }: RoadmapRecommendationDialogProps) {
   const [weakAreas, setWeakAreas] = useState("");
 
   const handleGenerate = () => {
-    if (weakAreas.trim()) {
+    if (weakAreas.trim() || true) {  // Allow generation even without input
       onGenerateRoadmap(weakAreas);
     }
   };
+
+  // Show generated roadmap if available
+  if (generatedRoadmap) {
+    return (
+      <Dialog open={open} onOpenChange={onClose}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-500" />
+              Your Custom Learning Path
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
+              <h3 className="font-bold text-lg mb-2">{generatedRoadmap.title}</h3>
+              <p className="text-sm text-muted-foreground">{generatedRoadmap.description}</p>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                Learning Steps ({generatedRoadmap.steps.length} Total)
+              </h4>
+              {generatedRoadmap.steps.map((step, idx) => (
+                <div key={idx} className="flex gap-3 p-3 bg-muted/50 rounded-lg border">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">
+                    {idx + 1}
+                  </div>
+                  <div className="flex-1">
+                    <h5 className="font-semibold mb-1">{step.title}</h5>
+                    <p className="text-sm text-muted-foreground">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={onClose} className="w-full">
+              Got It, Thanks!
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

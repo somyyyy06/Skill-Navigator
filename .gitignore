@@ -1,6 +1,44 @@
-node_modules
-dist
-.DS_Store
-server/public
-vite.config.ts.*
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment Variables - NEVER commit these!
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Build outputs
+dist/
+build/
 *.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# App-specific
+server/public/
+vite.config.ts.*
+.cache/
+.next/
+out/
+coverage/
+.turbo/
+
+# Docker volumes (local development)
+postgres-data/
+docker-data/

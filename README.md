@@ -1,284 +1,279 @@
-# Skill Navigator — Quick Start
+# 🎓 Skill Navigator - AI-Powered Learning Platform
 
-Short guide to clone, install and run this repository locally.
+An intelligent learning platform that generates personalized AI roadmaps, tracks progress with detailed metrics, and provides video-based learning resources for various tech skills.
 
-## Requirements
+## 📋 Features
 
-- Node.js 18+ (Node 20 recommended)
-- npm (or compatible package manager)
-- Postgres (for `DATABASE_URL` and persistent features)
-- Optional: OpenAI API key for ML/chat features
+- **🤖 AI-Powered Roadmap Generation** - Generate custom learning paths using Google Gemini AI
+- **📊 Learning Analytics** - Track time spent, attempts, progress, and estimated completion
+- **🎬 Video-Based Learning** - Curated YouTube tutorials for each learning step
+- **🔐 JWT Authentication** - Secure user authentication and session management
+- **📈 ML-Powered Insights** - Machine learning predictions for personalized recommendations
+- **🎨 Responsive UI** - Modern, gradient-based interface with TailwindCSS
+- **🐳 Docker Ready** - Complete containerization for easy deployment
+- **📱 Mobile Friendly** - Works seamlessly on desktop and mobile devices
 
-## Clone
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| **Frontend** | React 18, TypeScript, Vite, TailwindCSS |
+| **Backend** | Node.js, Express.js |
+| **Database** | PostgreSQL 16 |
+| **ORM** | Drizzle ORM |
+| **AI/ML** | Google Gemini 3.5 Flash, TensorFlow.js |
+| **Authentication** | JWT |
+| **Package Manager** | npm |
+| **Containerization** | Docker & Docker Compose |
+
+## 📦 Prerequisites
+
+### Option 1: Docker (Recommended)
+- Docker Desktop (v20.10+)
+- Docker Compose (v2.0+)
+- Disk space: ~2GB
+
+### Option 2: Local Development
+- Node.js (v20+)
+- npm (v10+)
+- PostgreSQL (v16+)
+- ~500MB disk space
+
+## 🚀 Quick Start
+
+### Using Docker (Recommended - 3 commands)
 
 ```bash
-git clone <REPO_URL>
-cd Skill-Navigator-1
+# 1. Clone the repository
+git clone https://github.com/yourusername/skill-navigator.git
+cd skill-navigator
+
+# 2. Setup environment
+cp .env.example .env
+# Edit .env with your API keys (see below)
+
+# 3. Build and deploy
+docker-compose build
+docker-compose up -d
+
+# Application will be available at http://localhost:5000
 ```
 
-## Install
+### Local Development Setup
 
 ```bash
+# 1. Clone and install dependencies
+git clone https://github.com/yourusername/skill-navigator.git
+cd skill-navigator
 npm install
-```
 
-## Environment
+# 2. Create environment file
+cp .env.example .env
 
-Create a `.env` file in the project root with the required values. Common variables:
+# 3. Make sure PostgreSQL is running on localhost:5433
+# Edit .env with your database credentials
 
-- `DATABASE_URL` - Postgres connection string
-- `SESSION_SECRET` - session signing secret
-- `JWT_SECRET` - JWT signing secret (if used)
-- `OPENAI_API_KEY` - OpenAI API key for chat/ML features
-- `PORT` - optional
-
-You can inspect `server` source and `shared` schema to find additional expected env keys.
-
-## Run (development)
-
-Dev server starts the backend and serves the frontend via Vite middleware. From project root:
-
-```bash
+# 4. Start development server
 npm run dev
+
+# Frontend: http://localhost:5173
+# Backend: http://localhost:5000
 ```
 
-Open http://localhost:3000 (or the `PORT` you set).
+## 🔧 Environment Configuration
 
-## Build & Run (production)
+Copy `.env.example` to `.env` and add your values:
 
-```bash
-npm run build
-npm start
-```
-
-The `build` script runs Vite to build the client and bundles the server to `dist/index.cjs`.
-
-## Database
-
-If you use Drizzle to manage schema, run migrations/push after setting `DATABASE_URL`:
-
-```bash
-npm run db:push
-```
-
-There is a sample migration file at `migrations/add_ml_tracking_tables.sql`.
-
-## Useful scripts (root `package.json`)
-
-- `npm run dev` — start server in development (server uses Vite middleware)
-- `npm run build` — build client (Vite) and bundle server
-- `npm start` — run production bundle
-- `npm run check` — TypeScript check
-- `npm run db:push` — apply Drizzle schema push
-
-## Notes
-
-- The client is in the `client/` folder and is served by the server in dev mode (no separate `client/package.json`).
-- If you prefer to run only the server, the server entry is `server/index.ts` and is started by `npm run dev`.
-- For Windows: `cross-env` is used in scripts so environment flags in scripts work cross-platform.
-
-## Contributing
-
-Open issues or submit PRs. If you'd like, I can create a `.env.example` and a simple `scripts/` commit with these README changes and push them for you.
-
----
-
-If you want, I can now commit these two files and create a `.env.example` with suggested placeholders.
-# LearnAI - Local Setup Complete ✅
-
-Your LearnAI project has been configured for local development with JWT-based authentication. Here's what has been set up:
-
-## 🔧 What's Been Done
-
-### Backend Changes
-- ✅ **JWT Authentication** - Created secure JWT middleware in `server/middleware/jwtAuth.ts`
-- ✅ **Auth Routes** - New endpoints in `server/replit_integrations/auth/localAuth.ts`:
-  - `POST /api/auth/register` - Create new accounts
-  - `POST /api/auth/login` - User login
-  - `GET /api/auth/user` - Get current user (requires JWT token)
-- ✅ **Password Security** - Added bcryptjs for secure password hashing
-- ✅ **Database Schema** - Updated users table with `passwordHash` field
-
-### Frontend Changes  
-- ✅ **Auth Hook** - Updated `client/src/hooks/use-auth.ts` with:
-  - JWT token storage in localStorage
-  - `login()` and `register()` functions
-  - Automatic token injection in API requests
-- ✅ **Auth Pages** - Created complete login/signup UI in `client/src/pages/auth.tsx`
-- ✅ **Protected Routes** - Updated routing to use `/auth` instead of Replit auth
-
-### Environment & Dependencies
-- ✅ **Dependencies Installed** - Added `bcryptjs`, `jsonwebtoken`, and type definitions
-- ✅ **.env Configured** - Database URL, JWT and session secrets ready
-
-## 🚀 Getting Started
-
-### Prerequisites
-1. **PostgreSQL installed** on your machine
-2. **Node.js and npm** installed
-
-### Step 1: Create PostgreSQL Database
-
-Open PowerShell and run:
-
-```powershell
-psql -U postgres
-```
-
-Then in the psql prompt:
-
-```sql
-CREATE DATABASE learnai;
-\q
-```
-
-### Step 2: Update .env with PostgreSQL Password
-
-Edit `.env` and change:
 ```env
-DATABASE_URL=postgres://postgres:YOUR_PASSWORD@localhost:5432/learnai
+# Database (PostgreSQL)
+DATABASE_URL=postgresql://user:password@localhost:5433/learnai
+
+# Authentication
+JWT_SECRET=your_super_secret_jwt_key_here_change_in_production
+
+# AI/ML (Get from https://ai.google.dev/)
+GEMINI_API_KEY=your_google_gemini_api_key_here
+
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:5173
 ```
 
-Replace `YOUR_PASSWORD` with your PostgreSQL password.
+⚠️ **IMPORTANT**: Never commit `.env` to GitHub. It's already in `.gitignore`.
 
-### Step 3: Initialize Database
-
-```powershell
-npm run db:push
-```
-
-This creates all tables including the updated users table with password support.
-
-### Step 4: Start Development Server
-
-```powershell
-npm run dev
-```
-
-Open `http://localhost:5000` in your browser.
-
-## 📱 Using the App
-
-### First Login
-1. Click **"Create Account"** on the auth page
-2. Fill in your details and create a password
-3. You'll be logged in automatically
-4. Your JWT token is stored in localStorage
-
-### How JWT Works
-1. Login/Register generates a token
-2. Token stored in browser's localStorage
-3. All requests include token in `Authorization: Bearer <token>` header
-4. Backend verifies token on protected routes
-5. Logout clears the token
-
-## 📁 Key Files
-
-| File | Purpose |
-|------|---------|
-| `server/middleware/jwtAuth.ts` | JWT verification middleware |
-| `server/replit_integrations/auth/localAuth.ts` | Login/register endpoints |
-| `client/src/hooks/use-auth.ts` | Frontend auth logic |
-| `client/src/pages/auth.tsx` | Login/signup UI |
-| `.env` | Environment variables |
-| `SETUP_GUIDE.md` | Detailed setup instructions |
-
-## ⚙️ Configuration
-
-### Environment Variables (.env)
-```env
-DATABASE_URL=postgres://postgres:password@localhost:5432/learnai
-SESSION_SECRET=your_session_secret_key_change_this_in_production
-JWT_SECRET=your_jwt_secret_key_change_this_in_production
-OPENAI_API_KEY=your_openai_api_key  # Optional
-```
-
-### JWT Token Expiration
-Default: 7 days (set in `server/middleware/jwtAuth.ts`)
-
-To change: Update `expiresIn` parameter in `generateJWT()` calls
-
-## 🔒 Security Notes
+## 📚 Available Commands
 
 ### Development
-- Default secrets are fine for local testing
-- Tokens stored in localStorage (accessible to JS)
-
-### Production
-1. **Change JWT_SECRET** to a cryptographically secure random string
-2. **Change SESSION_SECRET** to a random value
-3. **Use HTTPS** (enables secure cookies)
-4. **Use managed database** (AWS RDS, Heroku Postgres, etc.)
-5. **Run** `npm audit` to check for vulnerabilities
-6. **Consider** moving sensitive token operations to secure cookies (httpOnly)
-
-## 📚 API Endpoints
-
-### Authentication
-```
-POST /api/auth/register
-Content-Type: application/json
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "firstName": "John",
-  "lastName": "Doe"
-}
-Response: { token: "...", user: {...} }
-
-POST /api/auth/login
-Content-Type: application/json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-Response: { token: "...", user: {...} }
-
-GET /api/auth/user
-Authorization: Bearer <token>
-Response: { id: "...", email: "...", firstName: "...", ... }
+```bash
+npm run dev        # Start dev server (backend + frontend)
+npm run build      # Build for production
+npm run preview    # Preview production build locally
+npm run check      # TypeScript type checking
 ```
 
-### Other Endpoints
-All existing endpoints work as before. Protected endpoints require the JWT token in the Authorization header.
+### Docker
+```bash
+docker-compose up -d              # Start all services
+docker-compose down               # Stop services
+docker-compose logs -f app        # View application logs
+docker-compose ps                 # Check running services
+docker-compose restart            # Restart services
+```
+
+### Database
+```bash
+npm run db:push                   # Apply schema changes
+```
+
+## 🗂️ Project Structure
+
+```
+skill-navigator/
+├── client/                        # React frontend (Vite)
+│   ├── src/
+│   │   ├── components/           # Reusable components
+│   │   ├── pages/                # Page components
+│   │   ├── hooks/                # Custom React hooks
+│   │   ├── lib/                  # Utilities & helpers
+│   │   └── main.tsx              # Entry point
+│   └── index.html
+├── server/                        # Express.js backend
+│   ├── index.ts                  # Server entry point
+│   ├── routes.ts                 # API routes
+│   ├── db.ts                     # Database initialization
+│   ├── middleware/               # Authentication middleware
+│   └── storage.ts                # Business logic
+├── shared/                        # Shared code
+│   ├── schema.ts                 # Database schema (Drizzle)
+│   ├── models/                   # TypeScript interfaces
+│   └── routes.ts                 # Route definitions
+├── migrations/                    # SQL migrations
+├── Dockerfile                     # Container configuration
+├── docker-compose.yml            # Development services
+├── docker-compose.prod.yml       # Production services
+├── .env.example                  # Environment template
+└── package.json
+```
+
+## 📖 Documentation
+
+- **[DEPLOY.md](./DEPLOY.md)** - ⭐ **START HERE** - Simple 15-minute deployment guide
+- **[QUICK_DEPLOYMENT_COMMANDS.md](./QUICK_DEPLOYMENT_COMMANDS.md)** - Copy-paste commands
+- **[DOCKER_TROUBLESHOOTING.md](./DOCKER_TROUBLESHOOTING.md)** - Solutions to common issues
+
+## 🚢 Deployment
+
+### Quick Start (15 minutes)
+See **[DEPLOY.md](./DEPLOY.md)** for step-by-step instructions.
+
+**Best option for you:**
+1. **Test locally** - Run `docker-compose up -d` and test at `http://localhost:5000`
+2. **Deploy to Render.com** - Push to GitHub, connect Render, set environment variables, done! ✅
+
+### Options:
+- **Render.com (Recommended)** - Free tier, HTTPS included, easiest setup
+- **DigitalOcean** - More control, production-grade ($4/month)
+- **Local Docker** - For testing before cloud deployment
+
+Full instructions in [DEPLOY.md](./DEPLOY.md) - takes just 15 minutes!
 
 ## 🐛 Troubleshooting
 
-### "Cannot connect to PostgreSQL"
-- Verify PostgreSQL is running
-- Check DATABASE_URL in .env
-- Try connecting manually: `psql -U postgres`
-
-### "Module not found" errors
+### Port already in use
 ```bash
-npm install
+# Windows PowerShell
+netstat -ano | findstr :5000
+taskkill /PID <PID> /F
+
+# Linux/macOS
+lsof -i :5000
+kill -9 <PID>
 ```
 
-### Compilation errors
+### Database connection error
 ```bash
-npm run check
+# Verify PostgreSQL is running
+docker-compose ps
+
+# Check logs
+docker-compose logs postgres
+
+# Verify DATABASE_URL in .env
 ```
 
-### Database schema issues
-```bash
-npm run db:push
-```
+### Cannot connect to Gemini API
+- Verify API key in `.env`
+- Check quota at https://ai.google.dev/
+- Ensure key has access to `generateContent` API
 
-## 📞 Support Files
+## 🔐 Security
 
-- **SETUP_GUIDE.md** - Comprehensive setup instructions
-- **README.md** - This file
+⚠️ **Never commit `.env` file to version control**
 
-## ✨ Next Steps
+Your `.gitignore` already includes:
+- `.env`
+- `.env.local`
+- `.env.production`
+- `node_modules/`
+- `dist/`
 
-1. ✅ Create an account and test login
-2. Explore the dashboard
-3. (Optional) Set up OpenAI API key for AI features
-4. (Optional) Customize the UI and branding
-5. Test protected routes with your JWT token
+### Production Security Checklist
+- [ ] Change `JWT_SECRET` to a cryptographically random string
+- [ ] Use HTTPS/SSL certificates
+- [ ] Set `NODE_ENV=production`
+- [ ] Use strong database passwords
+- [ ] Enable PostgreSQL SSL connections
+- [ ] Regular security audits: `npm audit`
+- [ ] Keep dependencies updated: `npm update`
+- [ ] Configure firewall rules
+- [ ] Enable database backups
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🆘 Support & Community
+
+- 📧 **Email**: support@skillnavigator.com
+- 💬 **GitHub Issues**: [Report bugs](https://github.com/yourusername/skill-navigator/issues)
+- 📚 **Documentation**: [Full guides](./DOCKER_ONE_PAGE.md)
+
+## 🎯 Roadmap
+
+- [ ] Mobile app (React Native)
+- [ ] Social learning features
+- [ ] Peer code review
+- [ ] Certification badges
+- [ ] Advanced analytics
+- [ ] CI/CD pipeline
+- [ ] PostgreSQL replication (HA)
+- [ ] Redis caching layer
+
+## 📊 Project Statistics
+
+- **Total Roadmaps**: 9+ learning paths
+- **Video Resources**: 100+ curated tutorials
+- **Learning Steps**: 150+ interactive lessons
+- **Supported Skills**: JavaScript, TypeScript, React, Node.js, Database Design, and more
+
+## ✨ Acknowledgments
+
+- Google Gemini AI
+- React and Node.js communities
+- Docker for containerization
+- PostgreSQL community
 
 ---
 
-**Happy learning!** 🚀
+**Made with ❤️ for learners everywhere**
 
-For any issues, check the setup guide or verify your PostgreSQL connection.
+Last updated: February 2026 | [License](LICENSE) | [Issues](https://github.com/yourusername/skill-navigator/issues)

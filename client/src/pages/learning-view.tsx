@@ -176,44 +176,78 @@ export default function LearningView() {
             <div className="max-w-3xl mx-auto pb-20">
               <div className="mb-8 border-b pb-8">
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
-                  <Badge variant="outline">Step {steps.findIndex(s => s.id === activeStep.id) + 1} of {steps.length}</Badge>
-                  <Badge variant="secondary" className="bg-blue-100/50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                    {activeStep.estimatedMinutes} min
+                  <Badge variant="outline" className="bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-blue-950/40 dark:to-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-semibold">
+                    Step {steps.findIndex(s => s.id === activeStep.id) + 1} of {steps.length}
+                  </Badge>
+                  <Badge variant="secondary" className="bg-gradient-to-r from-purple-100/50 to-purple-50 dark:from-purple-950/40 dark:to-purple-900/30 border border-purple-200/50 dark:border-purple-800/50 text-purple-700 dark:text-purple-300 font-semibold">
+                    <Clock className="h-3 w-3 mr-1" /> {activeStep.estimatedMinutes} min
                   </Badge>
                   
                   {/* Show skill level estimate */}
                   <SkillLevelBadge size="sm" showLabel={false} skillLevel={skillPrediction?.skillLevel} />
                 </div>
                 
-                <h1 className="text-4xl font-display font-bold text-foreground mb-4">{activeStep.title}</h1>
+                <h1 className="text-4xl font-display font-bold text-foreground mb-6">{activeStep.title}</h1>
                 
-                {/* Enhanced metrics display */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-secondary/50 rounded-lg p-3 border border-border/50">
-                    <div className="text-xs text-muted-foreground font-medium">Estimated Time</div>
-                    <div className="text-lg font-bold text-foreground">{activeStep.estimatedMinutes}m</div>
+                {/* Enhanced Premium Metrics Display */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                  {/* Estimated Time Card */}
+                  <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/40 dark:to-blue-900/30 p-4 border border-blue-200/50 dark:border-blue-800/50 hover:shadow-lg hover:border-blue-300/70 dark:hover:border-blue-700/70 transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-blue-400/5 to-blue-400/0 group-hover:from-blue-400/5 group-hover:via-blue-400/10 group-hover:to-blue-400/5 transition-all" />
+                    <div className="relative flex flex-col">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                        <span className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Estimated Time</span>
+                      </div>
+                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">{activeStep.estimatedMinutes}m</div>
+                    </div>
                   </div>
                   
+                  {/* Time Spent Card */}
                   {timeSpent > 0 && (
-                    <div className="bg-secondary/50 rounded-lg p-3 border border-border/50">
-                      <div className="text-xs text-muted-foreground font-medium">Time Spent</div>
-                      <div className="text-lg font-bold text-foreground flex items-center gap-1">
-                        <Clock className="h-4 w-4 text-blue-500" /> {formatTime(timeSpent)}
+                    <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/40 dark:to-emerald-900/30 p-4 border border-emerald-200/50 dark:border-emerald-800/50 hover:shadow-lg hover:border-emerald-300/70 dark:hover:border-emerald-700/70 transition-all duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-emerald-400/5 to-emerald-400/0 group-hover:from-emerald-400/5 group-hover:via-emerald-400/10 group-hover:to-emerald-400/5 transition-all" />
+                      <div className="relative flex flex-col">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Zap className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
+                          <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Time Spent</span>
+                        </div>
+                        <div className="text-2xl font-bold text-emerald-900 dark:text-emerald-200">{formatTime(timeSpent)}</div>
                       </div>
                     </div>
                   )}
                   
+                  {/* Attempts Card */}
                   {stepVisitCount[activeStep.id] && stepVisitCount[activeStep.id] > 1 && (
-                    <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
-                      <div className="text-xs text-orange-700 dark:text-orange-400 font-medium">Attempts</div>
-                      <div className="text-lg font-bold text-orange-700 dark:text-orange-400">×{stepVisitCount[activeStep.id]}</div>
+                    <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/40 dark:to-amber-900/30 p-4 border border-amber-200/50 dark:border-amber-800/50 hover:shadow-lg hover:border-amber-300/70 dark:hover:border-amber-700/70 transition-all duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-r from-amber-400/0 via-amber-400/5 to-amber-400/0 group-hover:from-amber-400/5 group-hover:via-amber-400/10 group-hover:to-amber-400/5 transition-all" />
+                      <div className="relative flex flex-col">
+                        <div className="flex items-center gap-2 mb-2">
+                          <TrendingUp className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                          <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wider">Attempts</span>
+                        </div>
+                        <div className="text-2xl font-bold text-amber-900 dark:text-amber-200">×{stepVisitCount[activeStep.id]}</div>
+                      </div>
                     </div>
                   )}
                   
-                  <div className="bg-secondary/50 rounded-lg p-3 border border-border/50">
-                    <div className="text-xs text-muted-foreground font-medium">Progress</div>
-                    <div className="text-lg font-bold text-foreground">
-                      {Math.round((completedStepIds.size / steps.length) * 100)}%
+                  {/* Progress Card */}
+                  <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/40 dark:to-purple-900/30 p-4 border border-purple-200/50 dark:border-purple-800/50 hover:shadow-lg hover:border-purple-300/70 dark:hover:border-purple-700/70 transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-400/0 via-purple-400/5 to-purple-400/0 group-hover:from-purple-400/5 group-hover:via-purple-400/10 group-hover:to-purple-400/5 transition-all" />
+                    <div className="relative flex flex-col">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                        <span className="text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Progress</span>
+                      </div>
+                      <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">
+                        {Math.round((completedStepIds.size / steps.length) * 100)}%
+                      </div>
+                      <div className="mt-2 h-1.5 bg-purple-200/50 dark:bg-purple-800/50 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transition-all duration-500"
+                          style={{width: `${Math.round((completedStepIds.size / steps.length) * 100)}%`}}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -223,27 +257,52 @@ export default function LearningView() {
                 <ReactMarkdown>{activeStep.content}</ReactMarkdown>
               </div>
 
-              {/* Resources */}
+              {/* Enhanced Learning Resources Section */}
               {activeStep.resources && activeStep.resources.length > 0 && (
-                <div className="mb-12 bg-secondary/50 rounded-xl p-6 border border-border">
-                  <h3 className="text-lg font-bold mb-4">Learning Resources</h3>
-                  <div className="grid gap-3">
+                <div className="mb-12">
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold text-foreground mb-2">📚 Learning Resources</h3>
+                    <p className="text-sm text-muted-foreground">Click below to access the learning materials for this step</p>
+                  </div>
+                  <div className="grid gap-4">
                     {activeStep.resources.map((resource: any, i: number) => (
                       <a 
                         key={i} 
                         href={resource.url} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center p-3 bg-background rounded-lg border hover:border-primary transition-colors group"
+                        className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-950/40 dark:to-slate-900/30 border border-slate-200/50 dark:border-slate-800/50 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
                       >
-                        <div className="p-2 bg-muted rounded-md mr-3 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                          {resource.type === 'video' ? <Video className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 group-hover:from-primary/5 group-hover:via-primary/10 group-hover:to-primary/5 transition-all" />
+                        
+                        <div className="relative p-4 flex items-start gap-4">
+                          {/* Icon Container */}
+                          <div className={cn(
+                            "p-3 rounded-lg shrink-0 transition-all duration-300",
+                            resource.type === 'video' 
+                              ? "bg-gradient-to-br from-red-100 to-red-50 dark:from-red-950/40 dark:to-red-900/30 group-hover:from-red-200 group-hover:to-red-100 dark:group-hover:from-red-900/60 dark:group-hover:to-red-800/50"
+                              : "bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-950/40 dark:to-blue-900/30 group-hover:from-blue-200 group-hover:to-blue-100 dark:group-hover:from-blue-900/60 dark:group-hover:to-blue-800/50"
+                          )}>
+                            {resource.type === 'video' 
+                              ? <PlayCircle className="h-6 w-6 text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors" /> 
+                              : <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors" />
+                            }
+                          </div>
+                          
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                              <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors text-sm leading-tight">
+                                {resource.title}
+                              </h4>
+                              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-all" />
+                            </div>
+                            <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-200/40 dark:bg-slate-800/40 group-hover:bg-primary/10 transition-colors">
+                              <Video className={cn("h-3 w-3", resource.type === 'video' ? "text-red-600 dark:text-red-400" : "text-blue-600 dark:text-blue-400")} />
+                              <span className="text-xs font-medium text-slate-600 dark:text-slate-400 group-hover:text-primary capitalize">{resource.type}</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">{resource.title}</div>
-                          <div className="text-xs text-muted-foreground capitalize">{resource.type}</div>
-                        </div>
-                        <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                       </a>
                     ))}
                   </div>
@@ -368,7 +427,9 @@ export default function LearningView() {
       {/* Roadmap Recommendation Dialog */}
       <RoadmapRecommendationDialog
         open={showRecommendationDialog}
-        onClose={() => setShowRecommendationDialog(false)}
+        onClose={() => {
+          setShowRecommendationDialog(false);
+        }}
         skillLevel={assessmentResult?.skillLevel || "beginner"}
         roadmapTitle={enrollment.roadmap.title}
         onGenerateRoadmap={(weakAreas) => {
@@ -379,18 +440,15 @@ export default function LearningView() {
               skillLevel: assessmentResult?.skillLevel || "beginner",
             },
             {
-              onSuccess: (result) => {
-                setShowRecommendationDialog(false);
-                // Show success notification or navigate to custom roadmap view
-                alert(`Custom roadmap "${result.roadmap.title}" generated! It has ${result.roadmap.steps.length} steps tailored to your needs.`);
-              },
               onError: (error) => {
-                alert(`Failed to generate roadmap: ${error.message}`);
+                console.error('Roadmap generation error:', error);
+                alert(`❌ Failed to generate roadmap: ${error.message}\n\nPlease check:\n1. GEMINI_API_KEY is set in .env\n2. API key is valid\n3. Server console for detailed errors`);
               },
             }
           );
         }}
         isGenerating={isGeneratingRoadmap}
+        generatedRoadmap={generatedRoadmap?.roadmap}
       />
     </div>
   );
