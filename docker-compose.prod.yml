@@ -93,10 +93,6 @@ services:
 volumes:
   postgres_data_prod:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /data/postgres_prod
 
 networks:
   app-network-prod:

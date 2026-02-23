@@ -1,279 +1,197 @@
-# 🎓 Skill Navigator - AI-Powered Learning Platform
+# ?? Skill Navigator - AI-Powered Learning Platform
 
-An intelligent learning platform that generates personalized AI roadmaps, tracks progress with detailed metrics, and provides video-based learning resources for various tech skills.
+An intelligent learning platform that generates personalized roadmaps for mastering tech skills, powered by Google Gemini AI. Track your progress with detailed analytics, access curated video resources, and leverage ML-driven insights for an optimized learning journey.
 
-## 📋 Features
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://github.com/somyyyy06/Skill-Navigator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/docker-ready-blue)](https://www.docker.com/)
 
-- **🤖 AI-Powered Roadmap Generation** - Generate custom learning paths using Google Gemini AI
-- **📊 Learning Analytics** - Track time spent, attempts, progress, and estimated completion
-- **🎬 Video-Based Learning** - Curated YouTube tutorials for each learning step
-- **🔐 JWT Authentication** - Secure user authentication and session management
-- **📈 ML-Powered Insights** - Machine learning predictions for personalized recommendations
-- **🎨 Responsive UI** - Modern, gradient-based interface with TailwindCSS
-- **🐳 Docker Ready** - Complete containerization for easy deployment
-- **📱 Mobile Friendly** - Works seamlessly on desktop and mobile devices
+## ? Key Features
 
-## 🛠️ Tech Stack
+- **?? AI-Powered Roadmap Generation** - Create custom learning paths using Google Gemini AI
+- **?? Advanced Analytics** - Track time spent, progress metrics, and completion estimates  
+- **?? Curated Video Resources** - Hand-picked YouTube tutorials for each learning step
+- **?? Secure Authentication** - JWT-based user authentication with session management
+- **?? ML-Driven Insights** - Predictive analytics for personalized learning recommendations
+- **?? Modern UI** - Responsive interface built with React 18 and TailwindCSS
+- **?? Docker Ready** - Complete containerization for seamless deployment
+- **?? Fully Responsive** - Optimized experience across all devices
 
-| Component | Technology |
-|-----------|-----------|
-| **Frontend** | React 18, TypeScript, Vite, TailwindCSS |
-| **Backend** | Node.js, Express.js |
-| **Database** | PostgreSQL 16 |
-| **ORM** | Drizzle ORM |
-| **AI/ML** | Google Gemini 3.5 Flash, TensorFlow.js |
-| **Authentication** | JWT |
-| **Package Manager** | npm |
-| **Containerization** | Docker & Docker Compose |
+## ??? Tech Stack
 
-## 📦 Prerequisites
+**Frontend**
+- React 18 with TypeScript
+- Vite for blazing-fast builds
+- TailwindCSS for styling
+- Framer Motion for animations
+- shadcn/ui component library
 
-### Option 1: Docker (Recommended)
+**Backend**
+- Node.js + Express.js
+- PostgreSQL 16 database
+- Drizzle ORM
+- JWT authentication
+
+**AI/ML**
+- Google Gemini 3.5 Flash
+- TensorFlow.js for predictions
+
+**DevOps**
+- Docker & Docker Compose
+- Multi-stage builds for optimization
+
+## ?? Quick Start
+
+### Prerequisites
+
 - Docker Desktop (v20.10+)
 - Docker Compose (v2.0+)
-- Disk space: ~2GB
+- Node.js 20+ (for local development)
 
-### Option 2: Local Development
-- Node.js (v20+)
-- npm (v10+)
-- PostgreSQL (v16+)
-- ~500MB disk space
-
-## 🚀 Quick Start
-
-### Using Docker (Recommended - 3 commands)
+### Installation
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/skill-navigator.git
-cd skill-navigator
+# Clone the repository
+git clone https://github.com/somyyyy06/Skill-Navigator.git
+cd Skill-Navigator
 
-# 2. Setup environment
+# Copy environment template
 cp .env.example .env
-# Edit .env with your API keys (see below)
 
-# 3. Build and deploy
+# Edit .env with your credentials:
+# - Get GEMINI_API_KEY from https://ai.google.dev/
+# - Generate a secure JWT_SECRET (32+ characters)
+# - Configure database credentials
+
+# Build and start with Docker
 docker-compose build
 docker-compose up -d
 
-# Application will be available at http://localhost:5000
+# Access the application
+# Open http://localhost:5000
 ```
 
-### Local Development Setup
+### Local Development
 
 ```bash
-# 1. Clone and install dependencies
-git clone https://github.com/yourusername/skill-navigator.git
-cd skill-navigator
+# Install dependencies
 npm install
 
-# 2. Create environment file
-cp .env.example .env
-
-# 3. Make sure PostgreSQL is running on localhost:5433
-# Edit .env with your database credentials
-
-# 4. Start development server
+# Start development server
 npm run dev
 
 # Frontend: http://localhost:5173
 # Backend: http://localhost:5000
 ```
 
-## 🔧 Environment Configuration
+## ?? Documentation
 
-Copy `.env.example` to `.env` and add your values:
+- **[Deployment Guide](./DEPLOY.md)** - Step-by-step deployment instructions for production
 
-```env
-# Database (PostgreSQL)
-DATABASE_URL=postgresql://user:password@localhost:5433/learnai
-
-# Authentication
-JWT_SECRET=your_super_secret_jwt_key_here_change_in_production
-
-# AI/ML (Get from https://ai.google.dev/)
-GEMINI_API_KEY=your_google_gemini_api_key_here
-
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-CORS_ORIGIN=http://localhost:5173
-```
-
-⚠️ **IMPORTANT**: Never commit `.env` to GitHub. It's already in `.gitignore`.
-
-## 📚 Available Commands
-
-### Development
-```bash
-npm run dev        # Start dev server (backend + frontend)
-npm run build      # Build for production
-npm run preview    # Preview production build locally
-npm run check      # TypeScript type checking
-```
-
-### Docker
-```bash
-docker-compose up -d              # Start all services
-docker-compose down               # Stop services
-docker-compose logs -f app        # View application logs
-docker-compose ps                 # Check running services
-docker-compose restart            # Restart services
-```
-
-### Database
-```bash
-npm run db:push                   # Apply schema changes
-```
-
-## 🗂️ Project Structure
+## ??? Project Structure
 
 ```
 skill-navigator/
-├── client/                        # React frontend (Vite)
-│   ├── src/
-│   │   ├── components/           # Reusable components
-│   │   ├── pages/                # Page components
-│   │   ├── hooks/                # Custom React hooks
-│   │   ├── lib/                  # Utilities & helpers
-│   │   └── main.tsx              # Entry point
-│   └── index.html
-├── server/                        # Express.js backend
-│   ├── index.ts                  # Server entry point
-│   ├── routes.ts                 # API routes
-│   ├── db.ts                     # Database initialization
-│   ├── middleware/               # Authentication middleware
-│   └── storage.ts                # Business logic
-├── shared/                        # Shared code
-│   ├── schema.ts                 # Database schema (Drizzle)
-│   ├── models/                   # TypeScript interfaces
-│   └── routes.ts                 # Route definitions
-├── migrations/                    # SQL migrations
-├── Dockerfile                     # Container configuration
-├── docker-compose.yml            # Development services
-├── docker-compose.prod.yml       # Production services
-├── .env.example                  # Environment template
-└── package.json
++-- client/              # React frontend
+�   +-- src/
+�   �   +-- components/  # Reusable UI components
+�   �   +-- pages/       # Page components
+�   �   +-- hooks/       # Custom React hooks
+�   �   +-- lib/         # Utilities and helpers
+�   +-- public/
++-- server/              # Express.js backend
+�   +-- routes.ts        # API endpoints
+�   +-- db.ts            # Database configuration
+�   +-- middleware/      # Auth middleware
+�   +-- ml/              # ML prediction models
++-- shared/              # Shared TypeScript types
++-- migrations/          # Database migrations
++-- Dockerfile           # Container configuration
++-- docker-compose.yml   # Docker orchestration
 ```
 
-## 📖 Documentation
+## ?? Core Functionality
 
-- **[DEPLOY.md](./DEPLOY.md)** - ⭐ **START HERE** - Simple 15-minute deployment guide
-- **[QUICK_DEPLOYMENT_COMMANDS.md](./QUICK_DEPLOYMENT_COMMANDS.md)** - Copy-paste commands
-- **[DOCKER_TROUBLESHOOTING.md](./DOCKER_TROUBLESHOOTING.md)** - Solutions to common issues
+### Roadmap Generation
+Generate personalized learning roadmaps for various tech domains:
+- Frontend Development (React, Vue)
+- Backend Development (Node.js, Python)
+- Database Design
+- DevOps & Cloud
+- Machine Learning
+- And more...
 
-## 🚢 Deployment
+### Progress Tracking
+- Real-time progress monitoring
+- Time tracking per learning step
+- Attempt counting and analysis
+- Completion predictions using ML
 
-### Quick Start (15 minutes)
-See **[DEPLOY.md](./DEPLOY.md)** for step-by-step instructions.
+### Learning Resources
+Each roadmap step includes:
+- Detailed descriptions
+- Curated video tutorials
+- Practical implementation guides
+- Estimated completion time
 
-**Best option for you:**
-1. **Test locally** - Run `docker-compose up -d` and test at `http://localhost:5000`
-2. **Deploy to Render.com** - Push to GitHub, connect Render, set environment variables, done! ✅
+## ?? Deployment
 
-### Options:
-- **Render.com (Recommended)** - Free tier, HTTPS included, easiest setup
-- **DigitalOcean** - More control, production-grade ($4/month)
-- **Local Docker** - For testing before cloud deployment
+Deploy to production in minutes using Docker:
 
-Full instructions in [DEPLOY.md](./DEPLOY.md) - takes just 15 minutes!
-
-## 🐛 Troubleshooting
-
-### Port already in use
 ```bash
-# Windows PowerShell
-netstat -ano | findstr :5000
-taskkill /PID <PID> /F
-
-# Linux/macOS
-lsof -i :5000
-kill -9 <PID>
+# Production deployment
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
-### Database connection error
+For detailed deployment instructions including Render.com, Railway, and DigitalOcean, see [DEPLOY.md](./DEPLOY.md).
+
+## ?? Available Commands
+
 ```bash
-# Verify PostgreSQL is running
-docker-compose ps
+# Development
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run check        # TypeScript type checking
 
-# Check logs
-docker-compose logs postgres
+# Docker
+docker-compose up -d              # Start services
+docker-compose down               # Stop services
+docker-compose logs -f app        # View logs
 
-# Verify DATABASE_URL in .env
+# Database
+npm run db:push                   # Apply schema changes
 ```
 
-### Cannot connect to Gemini API
-- Verify API key in `.env`
-- Check quota at https://ai.google.dev/
-- Ensure key has access to `generateContent` API
+## ?? Environment Variables
 
-## 🔐 Security
+Create a `.env` file with the following:
 
-⚠️ **Never commit `.env` file to version control**
+```env
+DATABASE_URL=postgresql://user:password@localhost:5433/learnai
+JWT_SECRET=your-secure-jwt-secret-min-32-chars
+GEMINI_API_KEY=your-gemini-api-key
+NODE_ENV=production
+PORT=5000
+CORS_ORIGIN=http://localhost:5000
+```
 
-Your `.gitignore` already includes:
-- `.env`
-- `.env.local`
-- `.env.production`
-- `node_modules/`
-- `dist/`
+**?? Security**: Never commit `.env` to version control
 
-### Production Security Checklist
-- [ ] Change `JWT_SECRET` to a cryptographically random string
-- [ ] Use HTTPS/SSL certificates
-- [ ] Set `NODE_ENV=production`
-- [ ] Use strong database passwords
-- [ ] Enable PostgreSQL SSL connections
-- [ ] Regular security audits: `npm audit`
-- [ ] Keep dependencies updated: `npm update`
-- [ ] Configure firewall rules
-- [ ] Enable database backups
+## ?? Contributing
 
-## 🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 📄 License
+## ?? License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support & Community
+## ?? Acknowledgments
 
-- 📧 **Email**: support@skillnavigator.com
-- 💬 **GitHub Issues**: [Report bugs](https://github.com/yourusername/skill-navigator/issues)
-- 📚 **Documentation**: [Full guides](./DOCKER_ONE_PAGE.md)
-
-## 🎯 Roadmap
-
-- [ ] Mobile app (React Native)
-- [ ] Social learning features
-- [ ] Peer code review
-- [ ] Certification badges
-- [ ] Advanced analytics
-- [ ] CI/CD pipeline
-- [ ] PostgreSQL replication (HA)
-- [ ] Redis caching layer
-
-## 📊 Project Statistics
-
-- **Total Roadmaps**: 9+ learning paths
-- **Video Resources**: 100+ curated tutorials
-- **Learning Steps**: 150+ interactive lessons
-- **Supported Skills**: JavaScript, TypeScript, React, Node.js, Database Design, and more
-
-## ✨ Acknowledgments
-
-- Google Gemini AI
-- React and Node.js communities
-- Docker for containerization
-- PostgreSQL community
+- Google Gemini AI for intelligent roadmap generation
+- The open-source community for amazing tools and libraries
 
 ---
 
-**Made with ❤️ for learners everywhere**
+**Built with ?? for learners everywhere**
 
-Last updated: February 2026 | [License](LICENSE) | [Issues](https://github.com/yourusername/skill-navigator/issues)
+[Report Bug](https://github.com/somyyyy06/Skill-Navigator/issues) � [Request Feature](https://github.com/somyyyy06/Skill-Navigator/issues)

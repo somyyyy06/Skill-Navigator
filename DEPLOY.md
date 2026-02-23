@@ -97,8 +97,8 @@ Then follow the Render.com steps above.
    ```bash
    apt-get update && apt-get install git -y
    cd /root
-   git clone https://github.com/YOUR_USERNAME/skill-navigator.git
-   cd skill-navigator
+   git clone https://github.com/somyyyy06/Skill-Navigator.git
+   cd Skill-Navigator
    
    # Create .env
    nano .env
@@ -156,13 +156,6 @@ taskkill /PID <pid> /F
 
 # Or use different port
 ```
-
----
-
-## 📞 Support
-
-- See: [DOCKER_TROUBLESHOOTING.md](./DOCKER_TROUBLESHOOTING.md) for detailed issues
-- See: [QUICK_DEPLOYMENT_COMMANDS.md](./QUICK_DEPLOYMENT_COMMANDS.md) for commands
 
 ---
 

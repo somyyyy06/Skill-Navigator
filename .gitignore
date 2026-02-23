@@ -38,7 +38,12 @@ vite.config.ts.*
 out/
 coverage/
 .turbo/
+.local/
 
-# Docker volumes (local development)
+# Local development artifacts
 postgres-data/
 docker-data/
+
+# Internal documentation (not for public repo)
+CLEANUP_SUMMARY.md
+PRE_DEPLOYMENT_CHECKLIST.md

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, Terminal, Code2, BrainCircuit, Sparkles, Trophy, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
-// TODO: Add product screenshots to attached_assets directory
 import habitsImg from "@assets/image_1770021142728.png";
 import analyticsImg from "@assets/image_1770021201894.png";
 import streakImg from "@assets/image_1770021222554.png";
