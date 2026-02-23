@@ -84,11 +84,12 @@ npm run dev
 # Backend: http://localhost:5000
 ```
 
-## ?? Documentation
+## 📚 Documentation
 
-- **[Deployment Guide](./DEPLOY.md)** - Step-by-step deployment instructions for production
+- **[Quick Deploy (15 min)](./DEPLOY.md)** - Fast deployment to Render.com
+- **[Complete Deployment Guide](./DEPLOYMENT_GUIDE.md)** - Detailed step-by-step instructions for all platforms
 
-## ??? Project Structure
+## 🗂️ Project Structure
 
 ```
 skill-navigator/

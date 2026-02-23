@@ -47,3 +47,4 @@ docker-data/
 # Internal documentation (not for public repo)
 CLEANUP_SUMMARY.md
 PRE_DEPLOYMENT_CHECKLIST.md
+GITHUB_CLEANUP_SUMMARY.txt
