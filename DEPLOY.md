@@ -7,7 +7,7 @@ This guide covers both **local development** and **production deployment** for t
 ## Prerequisites
 
 - **Node.js** 20+ ([Download](https://nodejs.org/))
-- **PostgreSQL** 14+ ([Download](https://www.postgresql.org/download/))
+- **PostgreSQL** 16+ ([Download](https://www.postgresql.org/download/))
 - **npm** (comes with Node.js)
 
 ---
