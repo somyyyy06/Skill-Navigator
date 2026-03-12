@@ -42,7 +42,13 @@ export function useChat(conversationId: number | null) {
         credentials: "include", // Important for Replit Auth
       });
 
-      if (!response.ok) throw new Error("Failed to send message");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+        const errorMsg = errorData?.error || response.statusText;
+        const details = errorData?.details ? ` - ${errorData.details}` : "";
+        console.error(`[Chat] Server error (${response.status}): ${errorMsg}${details}`);
+        throw new Error(`Failed to send message`);
+      }
       if (!response.body) throw new Error("No response body");
 
       const reader = response.body.getReader();
