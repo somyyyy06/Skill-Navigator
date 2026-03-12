@@ -172,7 +172,6 @@ export class DatabaseStorage implements IStorage {
       return { totalSteps: 0, totalMinutes: 0, streak: 0 };
     }
   }
-
   async getDailyActivity(userId: string): Promise<DailyStat[]> {
     return await db.select().from(dailyStats)
       .where(eq(dailyStats.userId, userId))

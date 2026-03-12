@@ -3,7 +3,7 @@ import { chatStorage } from "./storage";
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
 const geminiBaseUrl = process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta";
-const geminiModel = process.env.GEMINI_MODEL || "gemini-3-flash-preview";
+const geminiModel = process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
 
 function getGeminiUrl(method: "generateContent" | "streamGenerateContent" = "generateContent") {
   if (!geminiApiKey) return null;
@@ -68,6 +68,11 @@ export function registerChatRoutes(app: Express): void {
       const conversationId = parseInt(req.params.id);
       const { content } = req.body;
 
+      // Validate input
+      if (!content) {
+        return res.status(400).json({ error: "Message content is required" });
+      }
+
       // Save user message
       await chatStorage.createMessage(conversationId, "user", content);
 
@@ -77,11 +82,6 @@ export function registerChatRoutes(app: Express): void {
         role: m.role as "user" | "assistant",
         content: m.content,
       }));
-
-      // Set up SSE
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
 
       const geminiUrl = getGeminiUrl("generateContent");
       if (!geminiUrl) {
@@ -105,12 +105,26 @@ export function registerChatRoutes(app: Express): void {
       if (!geminiResponse.ok) {
         const errorText = await geminiResponse.text();
         console.error("Gemini chat error:", errorText);
-        return res.status(500).json({ error: "Failed to send message" });
+        return res.status(500).json({ error: "Failed to send message to Gemini API" });
       }
+
+      // Set up SSE - only after we know the API call will work
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
 
       const geminiData = await geminiResponse.json();
       const fullResponse =
         geminiData?.candidates?.[0]?.content?.parts?.map((part: { text: string }) => part.text).join("") || "";
+
+      if (!fullResponse) {
+        return res.status(500).json({ error: "Empty response from Gemini API" });
+      }
+
+      // Set up SSE - only after we know the API call succeeded
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
 
       const chunks = fullResponse.match(/.{1,400}/g) || [];
       for (const chunk of chunks) {

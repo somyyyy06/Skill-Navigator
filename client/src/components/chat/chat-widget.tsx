@@ -8,11 +8,30 @@ import { cn } from "@/lib/utils";
 import { useChat, useCreateConversation } from "@/hooks/use-chat";
 import { AnimatePresence, motion } from "framer-motion";
 
+// Helper function to parse and render markdown
+function parseMarkdown(text: string) {
+  // Split by lines first to preserve line breaks
+  return text.split('\n').map((line, idx) => {
+    // Replace **text** with <strong>
+    const parts = line.split(/(\*\*.*?\*\*)/g);
+    return (
+      <div key={idx} className="mb-1">
+        {parts.map((part, i) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={i}>{part.slice(2, -2)}</strong>;
+          }
+          return part;
+        })}
+      </div>
+    );
+  });
+}
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [conversationId, setConversationId] = useState<number | null>(null);
-  
+
   const createConversation = useCreateConversation();
   const { messages, sendMessage, isStreaming, streamedContent } = useChat(conversationId);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -88,20 +107,24 @@ export function ChatWidget() {
                     <div
                       key={i}
                       className={cn(
-                        "flex w-max max-w-[80%] flex-col gap-2 rounded-2xl px-4 py-3 text-sm shadow-sm",
+                        "flex gap-2 rounded-2xl px-4 py-3 text-sm shadow-sm",
                         msg.role === "user"
-                          ? "ml-auto bg-primary text-primary-foreground rounded-tr-sm"
-                          : "bg-muted text-foreground rounded-tl-sm"
+                          ? "ml-auto bg-primary text-primary-foreground rounded-tr-sm max-w-[80%] break-words"
+                          : "mr-auto bg-muted text-foreground rounded-tl-sm max-w-[85%]"
                       )}
                     >
-                      {msg.content}
+                      <div className="whitespace-pre-wrap break-words">
+                        {msg.role === "assistant" ? parseMarkdown(msg.content) : msg.content}
+                      </div>
                     </div>
                   ))}
 
                   {isStreaming && (
-                    <div className="flex w-max max-w-[80%] flex-col gap-2 rounded-2xl rounded-tl-sm px-4 py-3 text-sm shadow-sm bg-muted text-foreground">
-                      {streamedContent}
-                      <span className="inline-block w-1.5 h-4 bg-primary align-middle ml-1 animate-pulse"/>
+                    <div className="flex mr-auto gap-2 rounded-2xl rounded-tl-sm px-4 py-3 text-sm shadow-sm bg-muted text-foreground max-w-[85%]">
+                      <div className="whitespace-pre-wrap break-words">
+                        {parseMarkdown(streamedContent)}
+                        <span className="inline-block w-1.5 h-4 bg-primary align-middle ml-1 animate-pulse"/>
+                      </div>
                     </div>
                   )}
                   
