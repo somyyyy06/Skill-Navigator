@@ -10,13 +10,14 @@ export interface IChatStorage {
   getMessagesByConversation(conversationId: number): Promise<(typeof messages.$inferSelect)[]>;
   createMessage(conversationId: number, role: string, content: string): Promise<typeof messages.$inferSelect>;
 
-  // 🔥 NEW FUNCTION
+  // 🔥 UPDATED FUNCTION
   getRoadmapStats(): Promise<{
     id: number;
     title: string;
     category: string;
     difficulty: string;
     totalMinutes: number;
+    stepCount: number; // 🔥 NEW
   }[]>;
 }
 
@@ -68,20 +69,30 @@ export const chatStorage: IChatStorage = {
     return message;
   },
 
-  // 🔥 NEW FUNCTION IMPLEMENTATION
+  // 🔥 UPDATED FUNCTION IMPLEMENTATION
   async getRoadmapStats() {
     const roadmapData = await db.select().from(roadmaps);
     const stepData = await db.select().from(steps);
 
-    const roadmapMap = new Map<number, number>();
+    const roadmapMap = new Map<
+      number,
+      {
+        totalMinutes: number;
+        stepCount: number;
+      }
+    >();
 
-    // Aggregate total minutes per roadmap
+    // Aggregate total minutes + module count
     for (const step of stepData) {
-      const current = roadmapMap.get(step.roadmapId) || 0;
-      roadmapMap.set(
-        step.roadmapId,
-        current + (step.estimatedMinutes || 0)
-      );
+      const current = roadmapMap.get(step.roadmapId) || {
+        totalMinutes: 0,
+        stepCount: 0,
+      };
+
+      roadmapMap.set(step.roadmapId, {
+        totalMinutes: current.totalMinutes + (step.estimatedMinutes || 0),
+        stepCount: current.stepCount + 1,
+      });
     }
 
     return roadmapData.map((r) => ({
@@ -89,7 +100,8 @@ export const chatStorage: IChatStorage = {
       title: r.title,
       category: r.category,
       difficulty: r.difficulty,
-      totalMinutes: roadmapMap.get(r.id) || 0,
+      totalMinutes: roadmapMap.get(r.id)?.totalMinutes || 0,
+      stepCount: roadmapMap.get(r.id)?.stepCount || 0, // 🔥 NEW
     }));
   },
 };

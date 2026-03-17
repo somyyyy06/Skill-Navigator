@@ -133,7 +133,7 @@ ${selectedData
     (r) =>
       `${r.title} (${r.difficulty}) → ${Math.round(
         r.totalMinutes / 60
-      )} hours`
+      )} hours, ${r.stepCount} modules`
   )
   .join("\n")}
 
