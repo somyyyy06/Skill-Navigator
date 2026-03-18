@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, Terminal, Code2, BrainCircuit, Sparkles, Trophy, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
-import habitsImg from "@assets/image_1770021142728.png";
-import analyticsImg from "@assets/image_1770021201894.png";
-import streakImg from "@assets/image_1770021222554.png";
+
+// Images are in public folder for client-only deployments
+const habitsImg = "/image_1770021142728.png";
+const analyticsImg = "/image_1770021201894.png";
+const streakImg = "/image_1770021222554.png";
 
 export default function LandingPage() {
   const containerVariants = {

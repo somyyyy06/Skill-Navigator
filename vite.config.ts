@@ -26,6 +26,7 @@ export default defineConfig({
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
   },
+  cacheDir: path.resolve(import.meta.dirname, ".vite"),
   root: path.resolve(import.meta.dirname, "client"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
@@ -36,5 +37,8 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+  },
+  ssr: {
+    noExternal: ["wouter"],
   },
 });

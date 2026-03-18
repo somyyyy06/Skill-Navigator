@@ -1,5 +1,5 @@
 import { db } from "../../db";
-import { conversations, messages } from "@shared/schema";
+import { conversations, messages, roadmaps, steps } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
 export interface IChatStorage {
@@ -9,20 +9,42 @@ export interface IChatStorage {
   deleteConversation(id: number): Promise<void>;
   getMessagesByConversation(conversationId: number): Promise<(typeof messages.$inferSelect)[]>;
   createMessage(conversationId: number, role: string, content: string): Promise<typeof messages.$inferSelect>;
+
+  // 🔥 UPDATED FUNCTION (NOW WITH MODULE NAMES)
+  getRoadmapStats(): Promise<{
+    id: number;
+    title: string;
+    category: string;
+    difficulty: string;
+    totalMinutes: number;
+    stepCount: number;
+    steps: string[]; // 🔥 IMPORTANT FIX
+  }[]>;
 }
 
 export const chatStorage: IChatStorage = {
   async getConversation(id: number) {
-    const [conversation] = await db.select().from(conversations).where(eq(conversations.id, id));
+    const [conversation] = await db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.id, id));
+
     return conversation;
   },
 
   async getAllConversations() {
-    return db.select().from(conversations).orderBy(desc(conversations.createdAt));
+    return db
+      .select()
+      .from(conversations)
+      .orderBy(desc(conversations.createdAt));
   },
 
   async createConversation(title: string) {
-    const [conversation] = await db.insert(conversations).values({ title }).returning();
+    const [conversation] = await db
+      .insert(conversations)
+      .values({ title })
+      .returning();
+
     return conversation;
   },
 
@@ -32,12 +54,58 @@ export const chatStorage: IChatStorage = {
   },
 
   async getMessagesByConversation(conversationId: number) {
-    return db.select().from(messages).where(eq(messages.conversationId, conversationId)).orderBy(messages.createdAt);
+    return db
+      .select()
+      .from(messages)
+      .where(eq(messages.conversationId, conversationId))
+      .orderBy(messages.createdAt);
   },
 
   async createMessage(conversationId: number, role: string, content: string) {
-    const [message] = await db.insert(messages).values({ conversationId, role, content }).returning();
+    const [message] = await db
+      .insert(messages)
+      .values({ conversationId, role, content })
+      .returning();
+
     return message;
   },
-};
 
+  // 🔥 FINAL IMPLEMENTATION
+  async getRoadmapStats() {
+    const roadmapData = await db.select().from(roadmaps);
+    const stepData = await db.select().from(steps);
+
+    const roadmapMap = new Map<
+      number,
+      {
+        totalMinutes: number;
+        stepCount: number;
+        steps: string[];
+      }
+    >();
+
+    for (const step of stepData) {
+      const current = roadmapMap.get(step.roadmapId) || {
+        totalMinutes: 0,
+        stepCount: 0,
+        steps: [],
+      };
+
+      roadmapMap.set(step.roadmapId, {
+        totalMinutes: current.totalMinutes + (step.estimatedMinutes || 0),
+        stepCount: current.stepCount + 1,
+        steps: [...current.steps, step.title],
+      });
+    }
+
+    return roadmapData.map((r) => ({
+      id: r.id,
+      title: r.title,
+      category: r.category,
+      difficulty: r.difficulty,
+      totalMinutes: roadmapMap.get(r.id)?.totalMinutes || 0,
+      stepCount: roadmapMap.get(r.id)?.stepCount || 0,
+      steps: roadmapMap.get(r.id)?.steps || [],
+    }));
+  },
+};

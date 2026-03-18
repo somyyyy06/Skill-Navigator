@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { User } from "@shared/models/auth";
+import { buildApiUrl } from "@/lib/api";
 
 async function fetchUser(): Promise<User | null> {
   const token = localStorage.getItem("auth_token");
@@ -8,7 +9,7 @@ async function fetchUser(): Promise<User | null> {
     return null;
   }
 
-  const response = await fetch("/api/auth/user", {
+  const response = await fetch(buildApiUrl("/api/auth/user"), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -43,7 +44,7 @@ export interface RegisterCredentials {
 }
 
 async function login(credentials: LoginCredentials): Promise<{ token: string; user: User }> {
-  const response = await fetch("/api/auth/login", {
+  const response = await fetch(buildApiUrl("/api/auth/login"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -62,7 +63,7 @@ async function login(credentials: LoginCredentials): Promise<{ token: string; us
 }
 
 async function register(credentials: RegisterCredentials): Promise<{ token: string; user: User }> {
-  const response = await fetch("/api/auth/register", {
+  const response = await fetch(buildApiUrl("/api/auth/register"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

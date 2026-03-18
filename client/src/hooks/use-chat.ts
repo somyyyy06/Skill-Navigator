@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
+import { buildApiUrl } from "@/lib/api";
 
 // Define message type based on the schema
 export type ChatMessage = {
@@ -30,7 +31,7 @@ export function useChat(conversationId: number | null) {
     abortControllerRef.current = new AbortController();
 
     try {
-      const url = `/api/conversations/${conversationId}/messages`;
+      const url = buildApiUrl(`/api/conversations/${conversationId}/messages`);
       
       const response = await fetch(url, {
         method: "POST",
